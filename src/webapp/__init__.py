@@ -1,12 +1,11 @@
 
 from flask import Flask
+from . import routes
 
 def create_app() -> Flask :
 
     app = Flask(__name__)
 
-    @app.route('/hello')
-    def hello():
-        return "Hello World"
+    app.register_blueprint(routes.index)
 
     return app
