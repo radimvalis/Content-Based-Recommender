@@ -1,14 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Based Recommender</title>
-</head>
-<body>
-    <h1>
-        Content Based Recommender
-    </h1>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="index.js"></script> 
+        <title>Content Based Recommender</title>
+    </head>
+
+    <body>
+
+        <h1>
+            Content Based Recommender
+        </h1>
+
+        <h4>
+            Recommendations for:<span id="span-username"> N/A </span>
+        </h4>
+
+        <ul id="ul-recommended-items"></ul>
+
+        <button id="btn-recommend">Recommend</button>
+        <button id="btn-show-change-user-dialog">Change User</button>
+        <button id="btn-show-create-user-dialog">Create User</button>
+
+        <dialog id="dialog-change-user"> 
+            <form id="form-change-user">
+                <h3>
+                    Select user:
+                </h3>
+
+                <div id="div-change-user-options"></div>
+
+                <button type="submit">Change</button>
+                <button type="reset" id="btn-close-change-user-dialog">Cancel</button>
+            </form>
+        </dialog>
+
+        <dialog id="dialog-create-user">
+            <form id="form-create-user">
+                <h3>
+                    Create user:
+                </h3>
+
+                <label for="input-username">Choose username:</label><br>
+                <input type="text" id="input-username" name="username" required><br>
+
+                <button type="submit">Create</button>
+                <button type="reset" id="btn-close-create-user-dialog">Cancel</button>
+            </form>
+        </dialog>
+        
+    </body>
 </html>
