@@ -60,6 +60,6 @@ class MockUpStorage(Storage):
 
         for set in keywords_set:
             title = "-".join(set)
-            data.append(StorageItem(title, f"https://www.example.org/{id}", set))
+            data.append(StorageItem(title, f"https://www.example.org", set))
 
         return data
