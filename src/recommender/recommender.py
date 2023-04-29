@@ -8,9 +8,9 @@ class Recommender:
         self.__storage: list[StorageItem] = []
 
     def recommend_to(self, user_profile: UserProfile, max_recommendations_count: int = 100) -> list[StorageItem]:
-        user_preferences = user_profile.preferences()
+        user_preferences = user_profile.preferences
         self.__storage.sort(
-            key = lambda item: Recommender.__jaccard_index(item.keywords(), user_preferences), reverse = True
+            key = lambda item: Recommender.__jaccard_index(item.keywords, user_preferences), reverse = True
         )
 
         if len(self.__storage) < max_recommendations_count:

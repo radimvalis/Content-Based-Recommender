@@ -8,12 +8,15 @@ class StorageItem:
         self.__title = title
         self.__keywords = set(keywords)
     
+    @property
     def url(self) -> str :
         return self.__url
     
+    @property
     def title(self) -> str:
         return self.__title
     
+    @property
     def keywords(self) -> set[str]:
         return self.__keywords
 
