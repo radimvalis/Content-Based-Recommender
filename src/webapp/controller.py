@@ -101,3 +101,7 @@ class RecommenderController:
             return [self.__current_user_proxy.next_recommended_item() for _ in range(5)] 
 
         return None
+
+
+controller = RecommenderController()
+controller.create_user("Test User")
