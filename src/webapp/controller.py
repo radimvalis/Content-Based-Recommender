@@ -82,6 +82,14 @@ class RecommenderController:
         self.__user_proxies.append(new_user_proxy)
         self.__current_user_proxy = new_user_proxy
         return True
+    
+    def delete_user(self, username: str) -> bool:
+        for i, up in enumerate(self.__user_proxies):
+            if up.username == username:
+                self.__user_proxies.pop(i)
+                return True
+        
+        return False
 
     def update_view_history(self, username: str, item_title: str) -> bool:
         if self.__current_user_proxy.username == username:

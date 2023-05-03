@@ -45,3 +45,10 @@ def handle_create_user(username: str):
         return redirect(url_for("api.handle_get_recommended_items", username = controller.current_user), code=303)
     
     return abort(400)
+
+@api.delete("/users/<username>")
+def handle_delete_user(username: str):
+    if controller.delete_user(username):
+        return "OK"
+    
+    return abort(400)

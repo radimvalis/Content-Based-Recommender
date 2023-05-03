@@ -23,6 +23,7 @@
         <button id="btn-recommend">Recommend</button>
         <button id="btn-show-change-user-dialog">Change User</button>
         <button id="btn-show-create-user-dialog">Create User</button>
+        <button id="btn-show-delete-user-dialog">Delete User</button>
 
         <dialog id="dialog-change-user"> 
             <form id="form-change-user">
@@ -48,6 +49,19 @@
 
                 <button type="submit">Create</button>
                 <button type="reset" id="btn-close-create-user-dialog">Cancel</button>
+            </form>
+        </dialog>
+
+        <dialog id="dialog-delete-user">
+            <form id="form-delete-user">
+                <h3>
+                    Delete user:
+                </h3>
+
+                <div id="div-delete-user-options"></div>
+
+                <button type="submit">Delete</button>
+                <button type="reset" id="btn-close-delete-user-dialog">Cancel</button>
             </form>
         </dialog>
         

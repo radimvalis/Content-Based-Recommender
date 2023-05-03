@@ -24,6 +24,30 @@ function displayUsername(username) {
     document.getElementById("span-username").textContent = username;
 }
 
+function displayUsernames(usernames, userOptionsDivID) {
+
+    const userOptionsDiv = document.getElementById(userOptionsDivID);
+    removeAllChildNodes(userOptionsDiv);
+
+    usernames.forEach(username => {
+        
+        const radioButton = document.createElement("input");
+        radioButton.setAttribute("type", "radio");
+        radioButton.setAttribute("value", username);
+        radioButton.setAttribute("id", "option-" + username);
+        radioButton.setAttribute("name", "username");
+        radioButton.setAttribute("required", "");
+    
+        const label = document.createElement("label");
+        label.setAttribute("for", "option-" + username);
+        label.textContent = username;
+    
+        userOptionsDiv.appendChild(radioButton);
+        userOptionsDiv.appendChild(label);
+        userOptionsDiv.appendChild(document.createElement("br"));
+    });
+}
+
 function displayDefaultPage() {
 
     displayUsername("N/A");
@@ -96,6 +120,12 @@ async function getRecommendedItems() {
     }
 }
 
+async function getUsernames() {
+
+    const response = await fetch("/api/users");
+    return await response.json();
+}
+
 async function changeUser() {
 
     const changeUserForm = document.getElementById("form-change-user");
@@ -117,6 +147,30 @@ async function changeUser() {
     }
 
     closeDialog("dialog-change-user");
+}
+
+async function deleteUser() {
+
+    const currentUser = sessionStorage.getItem("currentUser");
+    const deleteUserForm = document.getElementById("form-delete-user");
+
+    try {
+
+        const username = new FormData(deleteUserForm).get("username");
+
+        await fetch("/api/users/" + username, { method: "DELETE" });
+
+        if (username === currentUser) {
+
+            displayDefaultPage();
+        }
+
+    } catch {
+
+        displayDefaultPage();
+    }
+
+    closeDialog("dialog-delete-user");
 }
 
 async function createUser() {
@@ -141,8 +195,7 @@ async function createUser() {
 
     } catch {
 
-        displayDefaultPage
-        ();
+        displayDefaultPage();
     }
 
     closeDialog("dialog-create-user");
@@ -150,34 +203,21 @@ async function createUser() {
 
 async function showChangeUserDialog() {
 
-    const response = await fetch("/api/users");
-    const usernames = await response.json();
-
-    const userOptionsDiv = document.getElementById("div-change-user-options");
-    removeAllChildNodes(userOptionsDiv);
-
-    usernames.forEach(username => {
-        
-        const radioButton = document.createElement("input");
-        radioButton.setAttribute("type", "radio");
-        radioButton.setAttribute("value", username);
-        radioButton.setAttribute("id", "option-" + username);
-        radioButton.setAttribute("name", "username");
-        radioButton.setAttribute("required", "");
-    
-        const label = document.createElement("label");
-        label.setAttribute("for", "option-" + username);
-        label.textContent = username;
-    
-        userOptionsDiv.appendChild(radioButton);
-        userOptionsDiv.appendChild(label);
-        userOptionsDiv.appendChild(document.createElement("br"));
-    });
-
+    const usernames = await getUsernames();
+    displayUsernames(usernames, "div-change-user-options");
     openDialog("dialog-change-user");
 }
 
+async function showDeleteUserDialog() {
+
+    const usernames = await getUsernames();
+    displayUsernames(usernames, "div-delete-user-options");
+    openDialog("dialog-delete-user");
+}
+
 window.addEventListener("load", function() {
+
+    sessionStorage.clear();
 
     document.getElementById("btn-recommend").addEventListener("click", () => {
         getRecommendedItems();
@@ -203,6 +243,16 @@ window.addEventListener("load", function() {
         document.getElementById("dialog-create-user").close();
     });
 
+    // delete user dialog
+
+    document.getElementById("btn-show-delete-user-dialog").addEventListener("click", () => {
+        showDeleteUserDialog();
+    });
+
+    document.getElementById("btn-close-delete-user-dialog").addEventListener("click", () => {
+        document.getElementById("dialog-delete-user").close();
+    });
+
     // form submit
 
     document.getElementById("form-change-user").addEventListener("submit", (event) => {
@@ -213,5 +263,10 @@ window.addEventListener("load", function() {
     document.getElementById("form-create-user").addEventListener("submit", (event) => {
         event.preventDefault();
         createUser();
+    });
+
+    document.getElementById("form-delete-user").addEventListener("submit", (event) => {
+        event.preventDefault();
+        deleteUser();
     });
 })
