@@ -4,66 +4,83 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="index.js"></script> 
-        <title>Content Based Recommender</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="index.js"></script>
+        <title>CBR</title>
     </head>
 
     <body>
+        <div id="main">
 
-        <h1>
-            Content Based Recommender
-        </h1>
+            <div id="div-toolbar">
 
-        <h4>
-            Recommendations for: <span id="span-username">N/A</span>
-        </h4>
+                <h1 id="h1-long-version">
+                    Content Based Recommender
+                </h1>
 
-        <ul id="ul-recommended-items"></ul>
+                <h1 id="h1-short-version">
+                    CBR
+                </h1>
+    
+                <nav>
+                    <button id="btn-recommend">Recommend</button>
+                    <button id="btn-show-change-user-dialog">Change User</button>
+                    <button id="btn-show-create-user-dialog">Create User</button>
+                    <button id="btn-show-delete-user-dialog">Delete User</button>
+                </nav>
 
-        <button id="btn-recommend">Recommend</button>
-        <button id="btn-show-change-user-dialog">Change User</button>
-        <button id="btn-show-create-user-dialog">Create User</button>
-        <button id="btn-show-delete-user-dialog">Delete User</button>
+            </div>
 
-        <dialog id="dialog-change-user"> 
-            <form id="form-change-user">
-                <h3>
-                    Select user:
-                </h3>
+            <div id="div-content">
 
-                <div id="div-change-user-options"></div>
+                <h4 id="h4-username">
+                    Recommendations for: <span id="span-username">N/A</span>
+                </h4>
+                
+                <ul id="ul-recommended-items"></ul>
 
-                <button type="submit">Change</button>
-                <button type="reset" id="btn-close-change-user-dialog">Cancel</button>
-            </form>
-        </dialog>
-
-        <dialog id="dialog-create-user">
-            <form id="form-create-user">
-                <h3>
-                    Create user:
-                </h3>
-
-                <label for="input-username">Choose username:</label><br>
-                <input type="text" id="input-username" name="username" required><br>
-
-                <button type="submit">Create</button>
-                <button type="reset" id="btn-close-create-user-dialog">Cancel</button>
-            </form>
-        </dialog>
-
-        <dialog id="dialog-delete-user">
-            <form id="form-delete-user">
-                <h3>
-                    Delete user:
-                </h3>
-
-                <div id="div-delete-user-options"></div>
-
-                <button type="submit">Delete</button>
-                <button type="reset" id="btn-close-delete-user-dialog">Cancel</button>
-            </form>
-        </dialog>
+            </div>
         
+            <dialog id="dialog-change-user"> 
+                <form id="form-change-user">
+                    <h3>
+                        Select user:
+                    </h3>
+    
+                    <div id="div-change-user-options"></div>
+    
+                    <button type="submit">Change</button>
+                    <button type="reset" id="btn-close-change-user-dialog">Cancel</button>
+                </form>
+            </dialog>
+    
+            <dialog id="dialog-create-user">
+                <form id="form-create-user">
+                    <h3>
+                        Create user:
+                    </h3>
+    
+                    <label for="input-username">Choose username:</label><br>
+                    <input type="text" id="input-username" name="username" required><br>
+    
+                    <button type="submit">Create</button>
+                    <button type="reset" id="btn-close-create-user-dialog">Cancel</button>
+                </form>
+            </dialog>
+
+            <dialog id="dialog-delete-user">
+                <form id="form-delete-user">
+                    <h3>
+                        Select user:
+                    </h3>
+    
+                    <div id="div-delete-user-options"></div>
+    
+                    <button type="submit">Delete</button>
+                    <button type="reset" id="btn-close-delete-user-dialog">Cancel</button>
+                </form>
+            </dialog>
+
+        </div>        
     </body>
 </html>

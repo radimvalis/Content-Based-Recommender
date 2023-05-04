@@ -1,0 +1,215 @@
+
+body {
+
+    margin: 0px;
+    font-family: monospace;
+    font-size: larger;
+}
+
+#main {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+}
+
+h1{
+
+    color: white;
+}
+
+#h1-short-version {
+
+    display: none;
+}
+
+#h4-username {
+
+    align-self: flex-start;
+}
+
+#span-username {
+
+    color: lightcoral;
+}
+
+#div-toolbar {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: black;
+}
+
+nav {
+
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#div-content {
+
+    width: 80%;
+}
+
+#ul-recommended-items {
+
+    padding: 0;
+    list-style-position: inside;
+    line-height: 60px;
+    list-style-type: none;
+}
+
+li {
+
+    margin-bottom: 20px;
+    padding-left: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+input {
+
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    border: 2px solid;
+    border-radius: 10px;
+    font-size: large;
+}
+
+input[type="text"]:focus {
+
+    outline: none !important;
+    border: 2px solid lightcoral;
+}
+
+input[type="radio"] {
+
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+    border: 5px solid currentColor;
+    border-radius: 50%;
+    color: black;
+    accent-color: #000;
+  }
+
+a {
+
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+
+    text-decoration: underline;
+}
+
+button {
+
+    width: 160px;
+    height: 50px;
+    margin-bottom: 10px;
+    border: 2px solid white;
+    border-radius: 10px;
+    color: white;
+    font-family: monospace;
+    font-size: large;
+    font-weight: bold;
+    background: none;
+    cursor: pointer;
+}
+
+button:hover, button:active {
+
+    background-color: lightcoral;
+}
+
+dialog {
+
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 20px;
+}
+
+dialog::backdrop {
+
+    backdrop-filter: blur(10px);
+    opacity: 0.7;
+    background-color: black;
+}
+
+dialog > form > button {
+
+    color: black;
+    border-color: black;
+}
+
+@media screen and (min-width: 2100px) {
+
+    nav, #div-content {
+
+        width: 1680px;
+    }
+}
+
+@media screen and (max-width: 949px) {
+
+    nav {
+        
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 20px;
+    }
+
+    #div-content {
+
+        width: 100%;
+    }
+
+    #h4-username {
+
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    #ul-recommended-items {
+
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    button {
+
+        width: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+@media screen and (max-width: 469px) {
+
+    #h1-long-version {
+
+        display: none;
+    }
+
+    #h1-short-version {
+
+        display: inline-block;
+    }
+}
