@@ -1,12 +1,12 @@
 
 from recommender import Recommender
-from user import UserProfile
+from user import UserProfile, UserProfileSerializer
 from storage import StorageItem, MockUpStorage
 
 class UserProfileProxy:
 
-    def __init__(self, username: str) -> None:
-        self.__real_user = UserProfile(username)
+    def __init__(self, user: UserProfile) -> None:
+        self.__real_user = user
         self.__recommended_items: list[StorageItem] = []
         self.__updated_view_history: bool = True
         self.__next_item_idx = -1
@@ -52,7 +52,7 @@ class UserProfileProxy:
 class RecommenderController:
 
     def __init__(self) -> None:
-        self.__user_proxies: list[UserProfileProxy] = []
+        self.__user_proxies: list[UserProfileProxy] = self.__load_user_proxies()
         self.__current_user_proxy: UserProfileProxy = None
         self.__recommender = Recommender()
         self.__recommender.load_storage(MockUpStorage())
@@ -66,7 +66,9 @@ class RecommenderController:
         return self.__current_user_proxy.username
 
     def set_current_user(self, username: str) -> bool:
-        self.__current_user_proxy.updated_view_history = True
+        if self.__current_user_proxy != None:
+            self.__current_user_proxy.updated_view_history = True
+
         for up in self.__user_proxies:
             if up.username == username:
                 self.__current_user_proxy = up
@@ -78,15 +80,17 @@ class RecommenderController:
         if any(up.username == username for up in self.__user_proxies):
             return False
         
-        new_user_proxy = UserProfileProxy(username)
+        new_user_proxy = UserProfileProxy(UserProfile(username))
         self.__user_proxies.append(new_user_proxy)
         self.__current_user_proxy = new_user_proxy
+        self.__save_user_proxies()
         return True
     
     def delete_user(self, username: str) -> bool:
         for i, up in enumerate(self.__user_proxies):
             if up.username == username:
                 self.__user_proxies.pop(i)
+                self.__save_user_proxies()
                 return True
         
         return False
@@ -96,6 +100,7 @@ class RecommenderController:
             for item in self.__current_user_proxy.recommended_items:
                 if item.title == item_title:
                     self.__current_user_proxy.update_view_history(item)
+                    self.__save_user_proxies()
                     return True
         
         return False
@@ -109,7 +114,11 @@ class RecommenderController:
             return [self.__current_user_proxy.next_recommended_item() for _ in range(5)] 
 
         return None
+    
+    def __load_user_proxies(self):
+        return [UserProfileProxy(u) for u in UserProfileSerializer.load_users()]
 
+    def __save_user_proxies(self):
+        UserProfileSerializer.save_users([up.user for up in self.__user_proxies])
 
 controller = RecommenderController()
-controller.create_user("Test User")
