@@ -1,7 +1,8 @@
 
 from recommender import Recommender
 from user import UserProfile, UserProfileSerializer
-from storage import StorageItem, MockUpStorage
+from storage import StorageItem
+from config import STORAGE, MAX_VIEW_HISTORY_LEN
 
 class UserProfileProxy:
 
@@ -55,7 +56,7 @@ class RecommenderController:
         self.__user_proxies: list[UserProfileProxy] = self.__load_user_proxies()
         self.__current_user_proxy: UserProfileProxy = None
         self.__recommender = Recommender()
-        self.__recommender.load_storage(MockUpStorage())
+        self.__recommender.load_storage(STORAGE())
 
     @property
     def users(self) -> list[str]:
@@ -80,7 +81,7 @@ class RecommenderController:
         if any(up.username == username for up in self.__user_proxies):
             return False
         
-        new_user_proxy = UserProfileProxy(UserProfile(username))
+        new_user_proxy = UserProfileProxy(UserProfile(username, max_view_history_len=MAX_VIEW_HISTORY_LEN))
         self.__user_proxies.append(new_user_proxy)
         self.__current_user_proxy = new_user_proxy
         self.__save_user_proxies()
