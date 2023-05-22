@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cbr"
+version = "0.0.1"
+authors = [
+  { name="Radim Vališ"},
+]
+description = "Universal content based recommender"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+Repository = "https://github.com/radimvalis/Content-Based-Recommender"
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[tool.setuptools.packages.find]
+where = ["src"] 
+
+[project.scripts]
+cbr = "src:main.main"
