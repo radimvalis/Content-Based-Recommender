@@ -20,7 +20,7 @@ class UserProfileEncoder(json.JSONEncoder):
         as_dict = {
             "username": o.username,
             "view_history": [StorageItemEncoder().default(si) for si in o.view_history],
-            "max_view_history_len": o.max_view_history_len
+            "history_limit": o.history_limit
         }
         return as_dict
 
@@ -38,7 +38,7 @@ class UserProfileSerializer:
             users_as_json = json.load(stream)
             for user in users_as_json:
                 view_history = [StorageItem(i["title"], i["url"], i["keywords"]) for i in user["view_history"]]
-                users.append(UserProfile(user["username"], view_history, user["max_view_history_len"]))
+                users.append(UserProfile(user["username"], view_history, user["history_limit"]))
         
         return users
     

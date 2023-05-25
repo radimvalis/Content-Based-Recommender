@@ -2,7 +2,7 @@
 from recommender import Recommender
 from user import UserProfile, UserProfileSerializer
 from storage import StorageItem
-from config import STORAGE, MAX_VIEW_HISTORY_LEN
+from config import STORAGE, USER_HISTORY_LIMIT, RECOMMENDATIONS_LIMIT, RESULTS_PER_PAGE_LIMIT
 
 class UserProfileProxy:
 
@@ -81,7 +81,7 @@ class RecommenderController:
         if any(up.username == username for up in self.__user_proxies):
             return False
         
-        new_user_proxy = UserProfileProxy(UserProfile(username, max_view_history_len=MAX_VIEW_HISTORY_LEN))
+        new_user_proxy = UserProfileProxy(UserProfile(username, history_limit=USER_HISTORY_LIMIT))
         self.__user_proxies.append(new_user_proxy)
         self.__current_user_proxy = new_user_proxy
         self.__save_user_proxies()
@@ -109,10 +109,10 @@ class RecommenderController:
     def get_recommendation_for(self, username: str) -> list[StorageItem] | None:
         if self.__current_user_proxy.username == username:
             if self.__current_user_proxy.updated_view_history:
-                new_recommended_items = self.__recommender.recommend_to(self.__current_user_proxy.user)
+                new_recommended_items = self.__recommender.recommend_to(self.__current_user_proxy.user, RECOMMENDATIONS_LIMIT)
                 self.__current_user_proxy.recommended_items = new_recommended_items
 
-            return [self.__current_user_proxy.next_recommended_item() for _ in range(5)] 
+            return [self.__current_user_proxy.next_recommended_item() for _ in range(RESULTS_PER_PAGE_LIMIT)] 
 
         return None
     

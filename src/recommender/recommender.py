@@ -7,7 +7,7 @@ class Recommender:
     def __init__(self) -> None:
         self.__storage: list[StorageItem] = []
 
-    def recommend_to(self, user_profile: UserProfile, max_recommendations_count: int = 100) -> list[StorageItem]:
+    def recommend_to(self, user_profile: UserProfile, recommendations_limit: int = 100) -> list[StorageItem]:
         user_preferences = user_profile.preferences
         storage = self.__storage.copy()
         if len(user_preferences) > 0:
@@ -15,10 +15,10 @@ class Recommender:
                 key = lambda item: Recommender.__jaccard_index(item.keywords, user_preferences), reverse = True
             )
 
-        if len(storage) < max_recommendations_count:
+        if len(storage) < recommendations_limit:
             return storage
 
-        return storage[:max_recommendations_count]
+        return storage[:recommendations_limit]
 
     def load_storage(self, storage: Storage) -> None:
         self.__storage = storage.get_data()

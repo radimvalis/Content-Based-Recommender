@@ -4,7 +4,13 @@ from storage import MockUpStorage, IRozhlasStorage
 STORAGE = MockUpStorage
 
 # Number of viewed items to store in the user's profile
-MAX_VIEW_HISTORY_LEN = 5
+USER_HISTORY_LIMIT = 5
+
+# Number of recommended items
+RECOMMENDATIONS_LIMIT = 100
+
+# Number of recommended items shown at once
+RESULTS_PER_PAGE_LIMIT = 10
 
 # Flask debug mode
 DEBUG = False
