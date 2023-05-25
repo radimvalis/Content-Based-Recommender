@@ -21,7 +21,11 @@ class Recommender:
         return storage[:recommendations_limit]
 
     def load_storage(self, storage: Storage) -> None:
-        self.__storage = storage.get_data()
+        try:
+            self.__storage = storage.get_data()
+        except:
+            print("Data loading failed!")
+            exit(1)
 
     def __jaccard_index(a: set[str], b: set[str]) -> float:
         intersection_size = len(a.intersection(b))
