@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from src import Cbr, CbrConfig, Item
+from cbr import Cbr, CbrConfig, Item
 
 def get_mockup_data() -> list[Item]:
     keywords_set = [

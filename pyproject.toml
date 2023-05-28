@@ -25,4 +25,4 @@ Repository = "https://github.com/radimvalis/Content-Based-Recommender"
 dependencies = {file = "requirements.txt"}
 
 [tool.setuptools]
-packages = ["src", "src.recommender", "src.item", "src.user", "src.webapp"]
+packages = ["cbr", "cbr.recommender", "cbr.item", "cbr.user", "cbr.webapp"]

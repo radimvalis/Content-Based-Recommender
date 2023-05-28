@@ -1,5 +1,5 @@
 
-from src import Cbr, CbrConfig, Item
+from cbr import Cbr, CbrConfig, Item
 from datetime import datetime, timedelta
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
