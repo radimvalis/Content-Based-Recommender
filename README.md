@@ -6,6 +6,15 @@ Content based recommender system based on [Jaccard index](https://en.wikipedia.o
 
 ## Setup
 
+#### Option A
+
+* install the package directly
+```bash
+pip install git+https://github.com/radimvalis/Content-Based-Recommender.git
+```
+
+#### Option B
+
 * clone this repository
 ```bash
 git clone https://github.com/radimvalis/Content-Based-Recommender.git
