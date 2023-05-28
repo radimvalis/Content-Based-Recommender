@@ -2,14 +2,7 @@
 
 ## What?
 
-Content based recommender system based on [Jaccard index](https://en.wikipedia.org/wiki/Jaccard_index). The application consists of a web server with a built-in recommender system and a web UI available at [127.0.0.1:5000](http://127.0.0.1:5000). The system uses data from user-defined *storages*. Currently available *storages* are: `MockUpStorage` (for testing purposes), `IRozhlasStorage` (parses articles from [irozhlas.cz](https://www.irozhlas.cz/)). You can define your own storage by implementig a class derived form the following abstract class:
-```python
-class Storage(ABC):
-    
-    @abstractmethod
-    def get_data(self) -> list[StorageItem]:
-        pass
-```
+Content based recommender system based on [Jaccard index](https://en.wikipedia.org/wiki/Jaccard_index). The project consists of a web server with a built-in recommender system and a web UI available at [127.0.0.1:5000](http://127.0.0.1:5000).
 
 ## Setup
 
@@ -29,9 +22,26 @@ python3 -m venv venv
 pip install .
 ```
 
-* run the server
-```bash
-cbr
+## Example
+
+The system recommends user-provided data. You only need to store your items in an object of type `list[Item]` and assign it then to `CbrConfig.items`. A simple example:
+
+```python
+from cbr import Cbr, CbrConfig, Item
+    
+def get_example_data() -> list[Item]:
+    # 
+    # creating items ...
+    #
+    
+# Load items for recommendation
+CbrConfig.items = get_example_data()
+
+# Provide path to permanent storage
+CbrConfig.users_path = "users-example.json"
+
+# Start the server
+Cbr.run()
 ```
 
-* open [127.0.0.1:5000](http://127.0.0.1:5000) in your browser
+Then you can open [127.0.0.1:5000](http://127.0.0.1:5000) in your browser to see the system in action. For more examples check the `examples/` directory.
