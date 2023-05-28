@@ -1,3 +1,3 @@
-graft src/webapp/static
-graft src/webapp/templates
+graft cbr/webapp/static
+graft cbr/webapp/templates
 global-exclude *.pyc

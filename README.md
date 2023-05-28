@@ -9,6 +9,7 @@ Content based recommender system based on [Jaccard index](https://en.wikipedia.o
 * clone this repository
 ```bash
 git clone https://github.com/radimvalis/Content-Based-Recommender.git
+cd Content-Based-Recommender
 ```
 
 * create and activate a virtual environment
