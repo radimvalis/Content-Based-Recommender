@@ -8,4 +8,13 @@ class Cbr:
         """
         Starts content based recommender
         """
+
+        if CbrConfig.items == []:
+            print("No items provided!")
+            return
+        
+        if CbrConfig.users_path == "":
+            print("No users path provided!")
+            return
+
         create_app().run(debug=CbrConfig.debug)
