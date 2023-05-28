@@ -1,8 +1,24 @@
 
+from ..config import CbrConfig
+from .controller import RecommenderController
 from flask import Blueprint, request, render_template, url_for, redirect, abort
-from .controller import controller
+
 
 index = Blueprint("index", __name__)
+
+controller: RecommenderController = None
+
+@index.before_request
+def init_controller():
+    global controller
+    if controller == None:
+        controller = RecommenderController(
+            items=CbrConfig.items,
+            users_path=CbrConfig.users_path,
+            user_history_limit=CbrConfig.user_history_limit,
+            recommendations_limit=CbrConfig.recommendations_limit,
+            results_per_page_limit=CbrConfig.results_per_page_limit
+        )
 
 @index.get("/")
 def handle_index_view():

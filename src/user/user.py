@@ -1,9 +1,9 @@
 
-from storage import StorageItem
+from ..item import Item
 
 class UserProfile:
 
-    def __init__(self, username: str, view_history: list[StorageItem] = None, history_limit: int = 5) -> None:
+    def __init__(self, username: str, view_history: list[Item] = None, history_limit: int = 5) -> None:
         self.__username = username
         self.__view_history = view_history if view_history is not None else []
         self.__history_limit = history_limit
@@ -22,14 +22,14 @@ class UserProfile:
         return preferences
     
     @property
-    def view_history(self) -> set[StorageItem]:
+    def view_history(self) -> set[Item]:
         return self.__view_history
     
     @property
     def history_limit(self) -> int:
         return self.__history_limit
     
-    def update_view_history(self, viewed_item: StorageItem) -> None:
+    def update_view_history(self, viewed_item: Item) -> None:
         if len(self.__view_history) >= self.__history_limit:
             self.__view_history.pop(0)
 

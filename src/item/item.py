@@ -1,7 +1,5 @@
 
-from abc import ABC, abstractmethod
-
-class StorageItem:
+class Item:
 
     def __init__(self, title: str, url: str,  keywords: list[str] | set[str]) -> None:
         self.__url = url
@@ -19,9 +17,3 @@ class StorageItem:
     @property
     def keywords(self) -> set[str]:
         return self.__keywords
-
-class Storage(ABC):
-    
-    @abstractmethod
-    def get_data(self) -> list[StorageItem]:
-        pass

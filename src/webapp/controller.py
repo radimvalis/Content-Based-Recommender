@@ -1,14 +1,13 @@
 
-from recommender import Recommender
-from user import UserProfile, UserProfileSerializer
-from storage import StorageItem
-from config import STORAGE, USER_HISTORY_LIMIT, RECOMMENDATIONS_LIMIT, RESULTS_PER_PAGE_LIMIT
+from ..recommender import Recommender
+from ..user import UserProfile, UserProfileSerializer
+from ..item import Item
 
 class UserProfileProxy:
 
     def __init__(self, user: UserProfile) -> None:
         self.__real_user = user
-        self.__recommended_items: list[StorageItem] = []
+        self.__recommended_items: list[Item] = []
         self.__updated_view_history: bool = True
         self.__next_item_idx = -1
     
@@ -29,20 +28,20 @@ class UserProfileProxy:
         self.__updated_view_history = updated
 
     @property
-    def recommended_items(self) -> list[StorageItem]:
+    def recommended_items(self) -> list[Item]:
         return self.__recommended_items
     
     @recommended_items.setter
-    def recommended_items(self, recommended_items: list[StorageItem]) -> None:
+    def recommended_items(self, recommended_items: list[Item]) -> None:
         self.__recommended_items = recommended_items
         self.__updated_view_history = False
         self.__next_item_idx = -1
     
-    def update_view_history(self, viewed_item: StorageItem) -> None:
+    def update_view_history(self, viewed_item: Item) -> None:
         self.__real_user.update_view_history(viewed_item)
         self.__updated_view_history = True
     
-    def next_recommended_item(self) -> StorageItem:
+    def next_recommended_item(self) -> Item:
         self.__next_item_idx += 1
         if self.__next_item_idx >= len(self.__recommended_items):
             self.__next_item_idx = 0
@@ -52,11 +51,21 @@ class UserProfileProxy:
 
 class RecommenderController:
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            items: list[Item],
+            users_path: str,
+            user_history_limit: int,
+            recommendations_limit: int,
+            results_per_page_limit: int
+        ) -> None:
+        self.__items: list[Item] = items
+        self.__users_path: str = users_path
+        self.__user_history_limit: int = user_history_limit
+        self.__recommendations_limit: int = recommendations_limit
+        self.__results_per_page_limit: int = results_per_page_limit
         self.__user_proxies: list[UserProfileProxy] = self.__load_user_proxies()
         self.__current_user_proxy: UserProfileProxy = None
-        self.__recommender = Recommender()
-        self.__recommender.load_storage(STORAGE())
 
     @property
     def users(self) -> list[str]:
@@ -81,7 +90,7 @@ class RecommenderController:
         if any(up.username == username for up in self.__user_proxies):
             return False
         
-        new_user_proxy = UserProfileProxy(UserProfile(username, history_limit=USER_HISTORY_LIMIT))
+        new_user_proxy = UserProfileProxy(UserProfile(username, history_limit=self.__user_history_limit))
         self.__user_proxies.append(new_user_proxy)
         self.__current_user_proxy = new_user_proxy
         self.__save_user_proxies()
@@ -106,20 +115,18 @@ class RecommenderController:
         
         return False
 
-    def get_recommendation_for(self, username: str) -> list[StorageItem] | None:
+    def get_recommendation_for(self, username: str) -> list[Item] | None:
         if self.__current_user_proxy.username == username:
             if self.__current_user_proxy.updated_view_history:
-                new_recommended_items = self.__recommender.recommend_to(self.__current_user_proxy.user, RECOMMENDATIONS_LIMIT)
+                new_recommended_items = Recommender.recommend_to(self.__current_user_proxy.user, self.__items, self.__recommendations_limit)
                 self.__current_user_proxy.recommended_items = new_recommended_items
 
-            return [self.__current_user_proxy.next_recommended_item() for _ in range(RESULTS_PER_PAGE_LIMIT)] 
+            return [self.__current_user_proxy.next_recommended_item() for _ in range(self.__results_per_page_limit)] 
 
         return None
     
     def __load_user_proxies(self):
-        return [UserProfileProxy(u) for u in UserProfileSerializer.load_users()]
+        return [UserProfileProxy(u) for u in UserProfileSerializer.load_users(self.__users_path)]
 
     def __save_user_proxies(self):
-        UserProfileSerializer.save_users([up.user for up in self.__user_proxies])
-
-controller = RecommenderController()
+        UserProfileSerializer.save_users([up.user for up in self.__user_proxies], self.__users_path)

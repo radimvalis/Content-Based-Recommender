@@ -24,8 +24,5 @@ Repository = "https://github.com/radimvalis/Content-Based-Recommender"
 [tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
 
-[tool.setuptools.packages.find]
-where = ["src"] 
-
-[project.scripts]
-cbr = "src:main.main"
+[tool.setuptools]
+packages = ["src", "src.recommender", "src.item", "src.user", "src.webapp"]

@@ -1,31 +1,21 @@
 
-from user import UserProfile
-from storage import Storage, StorageItem
+from ..user import UserProfile
+from ..item import Item
 
 class Recommender:
 
-    def __init__(self) -> None:
-        self.__storage: list[StorageItem] = []
-
-    def recommend_to(self, user_profile: UserProfile, recommendations_limit: int = 100) -> list[StorageItem]:
+    def recommend_to(user_profile: UserProfile, items: list[Item], recommendations_limit: int = 100) -> list[Item]:
         user_preferences = user_profile.preferences
-        storage = self.__storage.copy()
+        items_copy = items.copy()
         if len(user_preferences) > 0:
-            storage.sort(
+            items_copy.sort(
                 key = lambda item: Recommender.__jaccard_index(item.keywords, user_preferences), reverse = True
             )
 
-        if len(storage) < recommendations_limit:
-            return storage
+        if len(items_copy) < recommendations_limit:
+            return items_copy
 
-        return storage[:recommendations_limit]
-
-    def load_storage(self, storage: Storage) -> None:
-        try:
-            self.__storage = storage.get_data()
-        except:
-            print("Data loading failed!")
-            exit(1)
+        return items_copy[:recommendations_limit]
 
     def __jaccard_index(a: set[str], b: set[str]) -> float:
         intersection_size = len(a.intersection(b))

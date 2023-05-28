@@ -1,5 +1,5 @@
 
-from storage import Storage, StorageItem
+from src import Cbr, CbrConfig, Item
 from datetime import datetime, timedelta
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
@@ -20,18 +20,18 @@ class ProgressBar:
             print("Loading completed", flush=True)
 
 
-class IRozhlasStorage(Storage):
+class IRozhlas:
 
     ARTICLE_BASE_URL = "https://www.irozhlas.cz"
     ARCHIVE_BASE_URL = "https://www.irozhlas.cz/zpravy-archiv/"
-    DAYS_COUNT = 7
+    DAYS_COUNT = 14
 
     def get_archive_urls():
         archive_urls = []
         today = datetime.now()
-        for i in range(IRozhlasStorage.DAYS_COUNT):
+        for i in range(IRozhlas.DAYS_COUNT):
             date = (today - timedelta(days=i)).date()
-            archive_url = IRozhlasStorage.ARCHIVE_BASE_URL + (str)(date)
+            archive_url = IRozhlas.ARCHIVE_BASE_URL + (str)(date)
             archive_urls.append(archive_url)
         
         return archive_urls
@@ -49,21 +49,21 @@ class IRozhlasStorage(Storage):
             return None
         
         title = article_soup.find("title").text[:-31]
-        return StorageItem(title, article_url, keywords)
+        return Item(title, article_url, keywords)
 
     async def extract_links_to_articles(archive_url: str, session: ClientSession):
         async with session.get(archive_url) as response:
             archive_html = await response.text()
         archive_soup = BeautifulSoup(archive_html, "html.parser")
         link_nodes = archive_soup.find_all("a", {"class": "b-article__link"})
-        return [IRozhlasStorage.ARTICLE_BASE_URL + a["href"] for a in link_nodes]
+        return [IRozhlas.ARTICLE_BASE_URL + a["href"] for a in link_nodes]
     
     async def create_storage():
         async with ClientSession() as session:
-            archive_urls = IRozhlasStorage.get_archive_urls()
+            archive_urls = IRozhlas.get_archive_urls()
             archives_tasks = []
             for archive_url in archive_urls:
-                task = asyncio.ensure_future(IRozhlasStorage.extract_links_to_articles(archive_url, session))
+                task = asyncio.ensure_future(IRozhlas.extract_links_to_articles(archive_url, session))
                 archives_tasks.append(task)
 
             archive_progress_bar = ProgressBar("Loading archives", len(archives_tasks))
@@ -75,7 +75,7 @@ class IRozhlasStorage(Storage):
             articles_tasks = []
             for day in articles_per_day:
                 for article_url in day:
-                    task = asyncio.ensure_future(IRozhlasStorage.create_article_item(article_url, session))
+                    task = asyncio.ensure_future(IRozhlas.create_article_item(article_url, session))
                     articles_tasks.append(task)
             
             articles_progress_bar = ProgressBar("Loading articles", len(articles_tasks))
@@ -86,5 +86,13 @@ class IRozhlasStorage(Storage):
             storage_items = await asyncio.gather(*articles_tasks, return_exceptions=True)
             return [i for i in storage_items if i != None]
 
-    def get_data(self) -> list[StorageItem]:
-        return asyncio.get_event_loop().run_until_complete(IRozhlasStorage.create_storage())
+    def get_data() -> list[Item]:
+        return asyncio.get_event_loop().run_until_complete(IRozhlas.create_storage())
+    
+def main():
+    CbrConfig.items = IRozhlas.get_data()
+    CbrConfig.users_path = "users-irozhlas.json"
+    Cbr.run()
+
+if __name__ == "__main__":
+    main()
